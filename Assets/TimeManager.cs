@@ -10,8 +10,9 @@ public class TimeManager : MonoBehaviour
     List<int> lastLoginTime = new List<int>();
     List<int> time = new List<int>();
 
-    public bool retrievedTime = false;
+    public bool retrievedTime { get; private set; }
     public int timeDifference { get; private set; }
+    public int timeLoggedIn { get; private set; }
 
     void Awake() 
     {
@@ -19,6 +20,7 @@ public class TimeManager : MonoBehaviour
 
         string str = PlayerPrefs.GetString("lastLoginTime", "0");
         string[] array = str.Split('/');
+        Debug.Log(array);
         if(array.Length > 1)
         {
             lastLoginTime.Add(int.Parse(array[0])); // Year
@@ -30,10 +32,13 @@ public class TimeManager : MonoBehaviour
         }
 
         StartCoroutine(RetrieveDate());
+        StartCoroutine(Timer());
     }
 
     void OnApplicationQuit() 
     {
+        lastLoginTime = time;
+        lastLoginTime[5] += timeLoggedIn;
         PlayerPrefs.SetString("lastLoginTime", string.Join("/", lastLoginTime));
     }
 
@@ -85,5 +90,15 @@ public class TimeManager : MonoBehaviour
         difference += (Second);
 
         return difference;
+    }
+
+    IEnumerator Timer() 
+    {
+        yield return new WaitForSeconds(1);
+        while (true)
+        {
+            timeLoggedIn++;
+            yield return new WaitForSeconds(1);
+        }
     }
 }

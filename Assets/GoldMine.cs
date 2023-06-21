@@ -6,7 +6,6 @@ using TMPro;
 
 public class GoldMine : MonoBehaviour
 {
-    int currentTimer;
     int availableGold;
 
     [SerializeField] Gold playersGold;
@@ -32,18 +31,17 @@ public class GoldMine : MonoBehaviour
     void CalculateGoldDifference()
     {
         availableGold += TimeManager.Singleton.timeDifference * goldPerSecond;
-        UpdateGoldText();
+        UpdateGoldCounter();
     }
 
     void CollectGold()
     {
-        UpdateGoldText();
         playersGold.AddGold(availableGold);
         availableGold = 0;
-        UpdateGoldText();
+        UpdateGoldCounter();
     }
 
-    void UpdateGoldText()
+    void UpdateGoldCounter()
     {
         btnText.text = "Collect " + availableGold + " Gold";
     }
@@ -54,7 +52,7 @@ public class GoldMine : MonoBehaviour
         while (true)
         {
             availableGold += goldPerSecond;
-            UpdateGoldText();
+            UpdateGoldCounter();
             yield return new WaitForSeconds(1);
         }
     }
