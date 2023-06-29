@@ -17,7 +17,7 @@ public class GoldMine : MonoBehaviour
     {
         availableGold = PlayerPrefs.GetInt("goldmine");
 
-        CalculateGoldDifference();
+        StartCoroutine(CalculateGoldDifference());
         StartCoroutine(Timer());
 
         collectGoldBtn.onClick.AddListener( delegate { CollectGold(); } );
@@ -28,8 +28,10 @@ public class GoldMine : MonoBehaviour
         PlayerPrefs.SetInt("goldmine", availableGold);
     }
 
-    void CalculateGoldDifference()
+    IEnumerator CalculateGoldDifference()
     {
+        while(!TimeManager.Singleton.retrievedTime) yield return null;
+
         availableGold += TimeManager.Singleton.timeDifference * goldPerSecond;
         UpdateGoldCounter();
     }
